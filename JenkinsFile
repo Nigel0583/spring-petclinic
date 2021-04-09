@@ -1,11 +1,13 @@
-#!/bin/env groovy
-
 pipeline {
-  agent none
+  agent any
 
   environment {
     IMAGE = "liatrio/petclinic-tomcat"
   }
+
+  triggers {
+        pollSCM '* * * * *'
+    }
 
   stages {
 
