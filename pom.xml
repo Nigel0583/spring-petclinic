@@ -151,6 +151,11 @@
             <artifactId>nohttp-checkstyle</artifactId>
             <version>${nohttp-checkstyle.version}</version>
           </dependency>
+          <dependency>
+            <groupId>org.jenkins-ci.plugins</groupId>
+            <artifactId>job-dsl-core</artifactId>
+            <version>1.76</version>
+          </dependency>
         </dependencies>
         <executions>
           <execution>
@@ -292,6 +297,10 @@
       <snapshots>
         <enabled>false</enabled>
       </snapshots>
+    </repository>
+    <repository>
+      <id>jenkins</id>
+      <url>https://repo.jenkins-ci.org/public/</url>
     </repository>
   </repositories>
 
