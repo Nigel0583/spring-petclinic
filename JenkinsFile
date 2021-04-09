@@ -14,7 +14,7 @@ pipeline {
     stage('Build') {
       agent {
         docker {
-          image 'maven:3.6.3'
+          image 'maven:3.5.0'
           args '-e INITIAL_ADMIN_USER -e INITIAL_ADMIN_PASSWORD --network=${LDOP_NETWORK_NAME}'
         }
       }
@@ -39,7 +39,7 @@ pipeline {
     stage('Get Artifact') {
       agent {
         docker {
-          image 'maven:3.6.3'
+          image 'maven:3.5.0'
           args '-e INITIAL_ADMIN_USER -e INITIAL_ADMIN_PASSWORD --network=${LDOP_NETWORK_NAME}'
         }
       }
@@ -78,7 +78,7 @@ pipeline {
     stage('Smoke-Test & OWASP Security Scan') {
       agent {
         docker {
-          image 'maven:3.6.3'
+          image 'maven:3.5.0'
           args '--network=${LDOP_NETWORK_NAME}'
         }
       }
@@ -123,7 +123,7 @@ pipeline {
       }
       agent {
         docker {
-          image 'maven:3.6.3'
+          image 'maven:3.5.0'
           args '--network=${LDOP_NETWORK_NAME}'
         }
       }
@@ -149,7 +149,7 @@ pipeline {
       }
       agent {
         docker {
-          image 'maven:3.6.3'
+          image 'maven:3.5.0'
           args '--network=${LDOP_NETWORK_NAME}'
         }
       }
