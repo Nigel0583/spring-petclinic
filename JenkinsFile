@@ -1,7 +1,5 @@
 #!/bin/env groovy
 
-@Library('ldop-shared-library@fd16602cad0f97ca1b04090f93a0540ddc871b45') _
-
 pipeline {
   agent none
 
