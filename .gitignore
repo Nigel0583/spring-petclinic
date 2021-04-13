@@ -8,5 +8,12 @@ target/*
 *.iml
 /target
 .sts4-cache/
-.vscode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
 _site/
+terraform/.terraform/*
+terraform/terraform.tfstate.backup
+terraform/terraform.tfstate
