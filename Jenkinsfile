@@ -6,13 +6,14 @@ pipeline {
     }
 
     stages {
-        stage("Build") {
-            steps {
-                bat  "mvn -version"
-                bat  "mvn clean install"
+            stage("Build") {
+                 agent { label 'WindowsNode' }
+                     steps {
+                    bat "mvn -version"
+                    vat "mvn clean install"
+                }
             }
         }
-    }
 
     post {
         always {
