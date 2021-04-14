@@ -11,7 +11,9 @@ pipeline {
 
     stages {
         stage("Build") {
-            steps {
+             agent { label 'WindowsNode' }
+                 steps {
+                echo 'Building..'
                 sh "ssh -V"
                 sh "mvn -version"
                 sh "mvn clean install"
