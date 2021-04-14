@@ -1,20 +1,16 @@
+#!groovy
+
 pipeline {
-    environment {
-        JAVA_TOOL_OPTIONS = "-Duser.home=/home/jenkins"
-    }
-    agent {
-        dockerfile {
-            label "docker"
-            args "-v /tmp/maven:/home/jenkins/.m2 -e MAVEN_CONFIG=/home/jenkins/.m2"
-        }
+    agent any
+
+    tools {
+        maven "3.6.0" // You need to add a maven with name "3.6.0" in the Global Tools Configuration page
     }
 
     stages {
         stage("Build") {
              agent { label 'WindowsNode' }
                  steps {
-                echo 'Building..'
-                sh "ssh -V"
                 sh "mvn -version"
                 sh "mvn clean install"
             }
