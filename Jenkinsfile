@@ -10,7 +10,7 @@ pipeline {
                  agent { label 'WindowsNode' }
                      steps {
                     bat "mvn -version"
-                    vat "mvn clean install"
+                    bat "mvn clean install"
                 }
             }
         }
