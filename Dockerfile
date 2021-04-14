@@ -1,3 +1,5 @@
-FROM tomcat:8
-COPY target/*.war /usr/local/tomcat/webapps/myweb.war
-# Added to test webhook
+FROM maven:3.6.0-jdk-12
+
+RUN useradd -m -u 1000 -s /bin/bash jenkins
+
+RUN yum install -y openssh-clients
