@@ -1,0 +1,56 @@
+[code language="xml"]
+	<?xml version="1.0" ?>
+<project name="foo" default="war" basedir=".">
+	<!-- PROPERTIES -->
+	<property name="buildDir" value="./build" />
+	<property name="distDir" value="./dist" />
+	<property name="warFileName" value="foo.war" />
+	<property name="imageFiles" value="**/*.gif,**/*.png,**/*.jpg" />
+	<property name="debug" value="true" />
+	<!-- TARGETS -->
+	<target name="build" depends="init">
+		<echo message="Copying non-binary files to build directory ..." />
+		<copy todir="${buildDir}/"
+			  verbose="${debug}"
+			  preservelastmodified="true">
+			<fileset dir="${basedir}" excludes="${imageFiles}">
+				<exclude name="${buildDir}/" />
+				<exclude name="${distDir}/" />
+				<exclude name="build.xml" />
+				<exclude name=".project" />
+				<exclude name="**/.svn" />
+			</fileset>
+		</copy>
+		<echo message="Copying binary files to build directory ..." />
+		<copy todir="${buildDir}/"
+			  verbose="${debug}"
+			  preservelastmodified="true">
+			<fileset dir="${basedir}" includes="${imageFiles}">
+				<exclude name="${buildDir}/" />
+				<exclude name="${distDir}/" />
+				<exclude name="build.xml" />
+				<exclude name=".project" />
+				<exclude name="**/.svn" />
+			</fileset>
+		</copy>
+		<echo message="File copy complete." />
+	</target>
+	<target name="war" depends="build">
+		<echo message="Creating WAR file ..." />
+		<war destfile="${distDir}/${warFileName}" webxml="${buildDir}/WEB-INF/web.xml">
+			<fileset dir="${buildDir}" />
+			<lib dir="${buildDir}/WEB-INF/lib" />
+			<classes dir="${buildDir}/WEB-INF/classes" />
+		</war>
+		<echo message="WAR file created." />
+	</target>
+	<target name="init">
+		<echo message="Deleting existing build directories and creating new ones ..." />
+		<delete dir="${buildDir}" />
+		<delete dir="${distDir}" />
+		<mkdir dir="${buildDir}" />
+		<mkdir dir="${distDir}" />
+		<echo message="Completed init target." />
+	</target>
+</project>
+	[/code]
