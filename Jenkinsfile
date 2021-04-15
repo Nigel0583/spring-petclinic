@@ -61,31 +61,22 @@ environment {
                    }
                  }
            }
-              stage('Publish to AWS S3') {
-                steps{
-                                  script {
-                                    withAwsCli([
-                                            credentialsId: 'aws_access',
-                                            defaultRegion: 'us-east-1']) {
+                  stage('Publish to AWS S3') {
 
-                                           bat '''
-                                              # COPY CREATED WAR FILE TO AWS S3
-                                              aws s3 cp ./target/spring-petclinic-2.4.2.jar s3://elasticbeanstalk-us-east-1-634057952844/2021105Fw1-spring-petclinic-2.4.2.jar
-                                              # CREATE A NEW BEANSTALK APPLICATION VERSION BASED ON THE WAR FILE LOCATED ON S3
-                                              aws elasticbeanstalk create-application-version \
-                                                 --application-name petclinic \
-                                                 --version-label "jenkins$BUILD_DISPLAY_NAME" \
-                                                 --description "Created by $BUILD_TAG" \
-                                                 --source-bundle=S3Bucket=elasticbeanstalk-us-east-1-634057952844/2021105Fw1
-                                              # UPDATE THE BEANSTALK ENVIRONMENT TO CREATE THE NEW APPLICATION VERSION
-                                              aws elasticbeanstalk update-environment \
-                                                 --environment-name=petclinic-qa-env \
-                                                 --version-label "jenkins$BUILD_DISPLAY_NAME"
-                                           '''
-                                    }
-                }                 }
+                      dir('./target/spring-petclinic-2.4.2.jar'){
 
-              }
+                          pwd(); //Log current directory
+
+                         withAWS(region:'us-east-1',credentials:'aws_cred') {
+
+                               def identity=awsIdentity();//Log AWS credentials
+
+                              // Upload files from working directory 'dist' in your project workspace
+                              s3Upload(bucket:"elasticbeanstalk-us-east-1-634057952844", workingDir:'dist', includePathPattern:'**/*');
+                          }
+
+                      };
+                  }
                stage('Remove Unused docker image') {
                  steps{
                    sh "docker rmi $imagename:$BUILD_NUMBER"
