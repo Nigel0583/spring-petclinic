@@ -68,7 +68,7 @@ environment {
                    }
                  }
                }
-               stage('Deploy Image') {
+               stage('Deploy AWR ECR') {
                                 steps{
                                   script {
                                     docker.withRegistry( '634057952844.dkr.ecr.us-east-1.amazonaws.com/petclinic20', 'ecr:us-east-1:aws_access' ) {
