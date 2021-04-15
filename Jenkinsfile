@@ -1,13 +1,8 @@
 pipeline {
-    environment {
-            JAVA_TOOL_OPTIONS = "-Duser.home=/var/maven"
-        }
-        agent {
-            docker {
-                image "maven:3.6.0-jdk-13"
-                label "docker"
-                args "-v /tmp/maven:/var/maven/.m2 -e MAVEN_CONFIG=/var/maven/.m2"
-            }
+    agent any
+
+        tools {
+            maven "MAVEN_HOME"
         }
 
     stages {
@@ -40,6 +35,11 @@ pipeline {
                         }
                     }
             }
+            stage("Build Docker Image"){
+                        steps{
+                            bat 'docker build -t nigel0582/pet_clinic_2:2.0.0 .'
+                        }
+                    }
     }
     post {
         always {
