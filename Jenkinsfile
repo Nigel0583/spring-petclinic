@@ -1,4 +1,9 @@
 pipeline {
+environment {
+        imagename = "nigel0582/pet_clinic_2"
+        registryCredential = 'dockerhub'
+        dockerImage = ''
+    }
     agent any
 
         tools {
@@ -35,19 +40,31 @@ pipeline {
                         }
                     }
             }
-            stage("Build Docker Image"){
-                        steps{
-                            bat 'docker build -t nigel0582/pet_clinic_2:2.0.0 .'
-                        }
-            }
-             stage("Push Docker Image"){
-                         steps{
-                             withCredentials([string(credentialsId: 'docker-pwd', variable: 'dockerHubPwd')]) {
-                                 bat "docker login -u nigel0582 -p ${dockerHubPwd}"
-                             }
-                             bat 'docker push nigel0582/pet_clinic_2:2.0.0'
-                         }
-             }
+           stage('Building image') {
+                 steps{
+                   script {
+                     dockerImage = docker.build imagename
+                   }
+                 }
+               }
+               stage('Deploy Image') {
+                 steps{
+                   script {
+                     docker.withRegistry( '', registryCredential ) {
+                       dockerImage.push("$BUILD_NUMBER")
+                        dockerImage.push('latest')
+
+                     }
+                   }
+                 }
+               }
+               stage('Remove Unused docker image') {
+                 steps{
+                   sh "docker rmi $imagename:$BUILD_NUMBER"
+                    sh "docker rmi $imagename:latest"
+
+                 }
+               }
     }
     post {
         always {
