@@ -3,6 +3,7 @@ environment {
         imagename = "nigel0582/pet_clinic_2"
         registryCredential = 'dockerhub'
         dockerImage = ''
+        scannerHome = tool 'SonarQubeScanner'
     }
     agent any
 
@@ -30,11 +31,9 @@ environment {
                     }
             }
            stage('Sonarqube') {
-               environment {
-                   scannerHome = tool 'SonarQubeScanner'
-               }    steps {
+                 steps {
                    withSonarQubeEnv('sonarqube') {
-                       sh "${scannerHome}/bin/sonar-scanner"
+                       bat "${scannerHome}/bin/sonar-scanner"
                    }        timeout(time: 10, unit: 'MINUTES') {
                        waitForQualityGate abortPipeline: true
                    }
