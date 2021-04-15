@@ -13,8 +13,8 @@ pipeline {
                     bat "mvn clean install"
                 }
             }
-        }
-        stage("Test"){
+
+            stage("Test"){
                     steps{
                         bat 'mvn test'
                     }
@@ -23,8 +23,9 @@ pipeline {
                             junit '**/target/surefire-reports/test-*.xml'
                         }
                     }
-                }
-                stage("Deploy"){
+            }
+
+            stage("Deploy"){
                     steps{
                         bat "mvn clean package"
                     }
@@ -33,8 +34,8 @@ pipeline {
                             archiveArtifacts 'target/*.jar'
                         }
                     }
-                }
-
+            }
+    }
     post {
         always {
             cleanWs()
