@@ -3,6 +3,8 @@ environment {
         imagename = "nigel0582/pet_clinic_2"
         registryCredential = 'dockerhub'
         dockerImage = ''
+         AWS_ACCESS_KEY_ID     = credentials('jenkins-aws-secret-key-id')
+         AWS_SECRET_ACCESS_KEY = credentials('jenkins-aws-secret-access-key')
     }
     agent any
 
@@ -59,21 +61,24 @@ environment {
                  }
            }
 
-           stage('Publish to AWS S3') {
-                  steps {
-                          withAWS(region:'us-east-1',credentials:'aws_cred') {
-                            s3Upload( bucket:'elasticbeanstalk-us-east-1-634057952844', path:'./target/', includePathPattern: 'spring-petclinic-2.4.2.jar', workingDir: 'build')
-                          }
-                        }
-           }
-
-           stage('Remove Unused docker image') {
+              stage('Publish to AWS S3') {
+                         steps {
+                             bat 'mvn package'
+                         }
+                         post {
+                             success {
+                                archiveArtifacts 'target/*.jar'
+                                sh 'aws configure set region us-east-1'
+                                sh 'aws s3 cp ./target/spring-petclinic-2.4.2.jar s3://elasticbeanstalk-us-east-1-634057952844/2021105Fw1-spring-petclinic-2.4.2.jar.jar'
+                             }
+                         }
+                     }
+               stage('Remove Unused docker image') {
                  steps{
                    sh "docker rmi $imagename:$BUILD_NUMBER"
                     sh "docker rmi $imagename:latest"
-
                  }
-           }
+               }
     }
     post {
         always {
