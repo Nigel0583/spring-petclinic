@@ -3,7 +3,6 @@ environment {
         imagename = "nigel0582/pet_clinic_2"
         registryCredential = 'dockerhub'
         dockerImage = ''
-        scannerHome = tool 'SonarQubeScanner'
     }
     agent any
 
@@ -33,7 +32,7 @@ environment {
            stage('Sonarqube analysis') {
                steps {
                    script {
-                       scannerHome = tool 'SonarScanner';
+                       scannerHome = tool 'sonar-scanner';
                    }
                    withSonarQubeEnv('SonarQube') {
                        bat "${scannerHome}/bin/sonar-scanner.bat"
