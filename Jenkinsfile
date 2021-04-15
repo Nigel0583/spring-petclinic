@@ -62,7 +62,7 @@ environment {
 
               stage('Publish to AWS S3') {
                          steps {
-                             bat '.\mvnw package'
+                             bat 'mvn package'
                          }
                          post {
                              success {
