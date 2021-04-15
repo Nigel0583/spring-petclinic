@@ -47,6 +47,7 @@ pipeline {
                              }
                              bat 'docker push nigel0582/pet_clinic_2:2.0.0'
                          }
+                         }
     }
     post {
         always {
