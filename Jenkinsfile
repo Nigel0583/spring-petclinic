@@ -62,20 +62,11 @@ environment {
                  }
            }
                   stage('Publish to AWS S3') {
-
-                      dir('./target/spring-petclinic-2.4.2.jar'){
-
-                          pwd(); //Log current directory
-
-                         withAWS(region:'us-east-1',credentials:'aws_cred') {
-
-                               def identity=awsIdentity();//Log AWS credentials
-
-                              // Upload files from working directory 'dist' in your project workspace
-                              s3Upload(bucket:"elasticbeanstalk-us-east-1-634057952844", workingDir:'dist', includePathPattern:'**/*');
+                  steps {
+                          withAWS(region:'us-east-1',credentials:'aws_cred') {
+                            s3Upload(pathStyleAccessEnabled:true, payloadSigningEnabled: true, file:'./target/spring-petclinic-2.4.2.jar', bucket:'elasticbeanstalk-us-east-1-634057952844')
                           }
-
-                      };
+                        }
                   }
                stage('Remove Unused docker image') {
                  steps{
