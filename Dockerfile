@@ -1,5 +1,5 @@
 FROM maven:3.6.0-jdk-12
 
-RUN useradd -m -u 1000 -s /bin/bash jenkins
+ADD target/spring-petclinic-2.4.2.jar spring-petclinic-2.4.2.jar
 
-RUN yum install -y openssh-clients
+ENTRYPOINT ["java", "-jar", "/spring-petclinic-2.4.2.jar"]

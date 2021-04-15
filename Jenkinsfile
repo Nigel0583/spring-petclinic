@@ -7,11 +7,9 @@ pipeline {
 
     stages {
             stage("Build") {
-                 agent { label 'WindowsNode' }
                      steps {
                     bat "mvn -version"
                     bat "mvn clean install"
-                }
             }
 
             stage("Test"){
