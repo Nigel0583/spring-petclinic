@@ -30,6 +30,7 @@ environment {
                     }
             }
            stage('Sonarqube analysis') {
+           // Reference https://github.com/jatinngupta/Jenkins-SonarQube-Pipeline/blob/master/Jenkinsfile
                steps {
                    script {
                        scannerHome = tool 'sonar-scanner';
@@ -66,6 +67,17 @@ environment {
                      }
                    }
                  }
+               }
+               stage('Deploy Image') {
+                                steps{
+                                  script {
+                                    docker.withRegistry( '634057952844.dkr.ecr.us-east-1.amazonaws.com/petclinic20', 'ecr:us-east-1:aws_access' ) {
+                                      dockerImage.push("$BUILD_NUMBER")
+                                       dockerImage.push('latest')
+
+                                    }
+                                  }
+                                }
                }
                stage('Remove Unused docker image') {
                  steps{
