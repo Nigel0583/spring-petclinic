@@ -64,7 +64,7 @@ environment {
               stage('Publish to AWS S3') {
                 steps{
                                   script {
-                                    withAwsCli[(
+                                    withAwsCli([
                                             credentialsId: 'aws_access',
                                             defaultRegion: 'us-east-1']) {
 
