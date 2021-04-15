@@ -14,6 +14,26 @@ pipeline {
                 }
             }
         }
+        stage("Test"){
+                    steps{
+                        bat 'mvn test'
+                    }
+                    post{
+                        always{
+                            junit '**/target/surefire-reports/test-*.xml'
+                        }
+                    }
+                }
+                stage("Deploy"){
+                    steps{
+                        bat "mvn clean package"
+                    }
+                    post{
+                        success {
+                            archiveArtifacts 'target/*.jar'
+                        }
+                    }
+                }
 
     post {
         always {
