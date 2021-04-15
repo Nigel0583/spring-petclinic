@@ -1,3 +1,5 @@
+def awsCredentials = [[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws_access']]
+
 pipeline {
 environment {
         imagename = "nigel0582/pet_clinic_2"
@@ -58,17 +60,18 @@ environment {
                  }
            }
 
-               stage('Deploy AWR ECR') {
-                                steps{
-                                  script {
-                                    docker.withRegistry( '634057952844.dkr.ecr.us-east-1.amazonaws.com/petclinic20', 'aws_access' ) {
-                                      dockerImage.push("$BUILD_NUMBER")
-                                       dockerImage.push('latest')
-
-                                    }
-                                  }
-                                }
-               }
+              stage('Publish to AWS S3') {
+                         steps {
+                             bat '.\mvnw package'
+                         }
+                         post {
+                             success {
+                                archiveArtifacts 'target/*.jar'
+                                bat 'aws configure set region us-east-1'
+                                bat 'aws s3 cp ./target/spring-petclinic-2.4.2.jar s3://elasticbeanstalk-us-east-1-634057952844/2021105Fw1-spring-petclinic-2.4.2.jar.jar'
+                             }
+                         }
+                     }
                stage('Remove Unused docker image') {
                  steps{
                    sh "docker rmi $imagename:$BUILD_NUMBER"
