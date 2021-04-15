@@ -68,8 +68,8 @@ environment {
                          post {
                              success {
                                 archiveArtifacts 'target/*.jar'
-                                sh 'aws configure set region us-east-1'
-                                sh 'aws s3 cp ./target/spring-petclinic-2.4.2.jar s3://elasticbeanstalk-us-east-1-634057952844/2021105Fw1-spring-petclinic-2.4.2.jar.jar'
+                                bat '$(which aws) configure set region us-east-1'
+                                bat '$(which aws) s3 cp ./target/spring-petclinic-2.4.2.jar s3://elasticbeanstalk-us-east-1-634057952844/2021105Fw1-spring-petclinic-2.4.2.jar.jar'
                              }
                          }
                      }
