@@ -64,7 +64,7 @@ environment {
                   stage('Publish to AWS S3') {
                   steps {
                           withAWS(region:'us-east-1',credentials:'aws_cred') {
-                            s3Upload(pathStyleAccessEnabled:true, payloadSigningEnabled: true, file:'./target/spring-petclinic-2.4.2.jar', bucket:'elasticbeanstalk-us-east-1-634057952844')
+                            s3Upload(file:'./target/spring-petclinic-2.4.2.jar', bucket:'elasticbeanstalk-us-east-1-634057952844')
                           }
                         }
                   }
