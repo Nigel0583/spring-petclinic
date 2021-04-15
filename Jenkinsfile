@@ -2,7 +2,7 @@ pipeline {
  environment {
     registry = "nigel0582/pet_clinic_2"
     registryCredential = 'dockerhub'
-    dockerImage = ''
+    dockerImage = docker.build registry + ":$BUILD_NUMBER"
   }
     agent any
 
@@ -42,16 +42,18 @@ pipeline {
             }
             stage("Build Docker Image"){
                         steps{
-                            bat 'docker build -t nigel0582/pet_clinic_2:2.0.0 .'
+                           script {
+                                     docker.build registry + ":$BUILD_NUMBER"
+                                   }
                         }
                     }
-             stage("Push Docker Image"){
+             stage("Deploy Image"){
                          steps{
-                             withCredentials([string('', registryCredential)]) {
-                                 bat "docker login -u nigel0582 -p ${dockerHubPwd}"
-                             }
-                             bat 'docker push nigel0582/pet_clinic_2:2.0.0'
-                         }
+                             script {
+                                   docker.withRegistry( '', registryCredential ) {
+                                     dockerImage.push()
+                                   }
+                                 }
                          }
     }
     post {
