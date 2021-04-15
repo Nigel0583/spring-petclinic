@@ -1,7 +1,3 @@
-@Library('github.com/releaseworks/jenkinslib') _
-
-def awsCredentials = [[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws_access']]
-
 pipeline {
 environment {
         imagename = "nigel0582/pet_clinic_2"
@@ -54,6 +50,7 @@ environment {
                         }
                     }
             }
+
            stage('Building image') {
                  steps{
                    script {
@@ -61,20 +58,22 @@ environment {
                    }
                  }
            }
-                  stage('Publish to AWS S3') {
+
+           stage('Publish to AWS S3') {
                   steps {
                           withAWS(region:'us-east-1',credentials:'aws_cred') {
-                            s3Upload(file:'spring-petclinic-2.4.2.jar', bucket:'elasticbeanstalk-us-east-1-634057952844', path:'./target/spring-petclinic-2.4.2.jar')
+                            s3Upload( bucket:'elasticbeanstalk-us-east-1-634057952844', path:'./target/', includePathPattern: 'spring-petclinic-2.4.2.jar', workingDir: 'build')
                           }
                         }
-                  }
-               stage('Remove Unused docker image') {
+           }
+
+           stage('Remove Unused docker image') {
                  steps{
                    sh "docker rmi $imagename:$BUILD_NUMBER"
                     sh "docker rmi $imagename:latest"
 
                  }
-               }
+           }
     }
     post {
         always {
