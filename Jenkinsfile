@@ -88,7 +88,7 @@ pipeline {
   stage('Publish to AWS S3 and AWS Elastic Beanstalk') {
      //Reference https://coralogix.com/log-analytics-blog/ci-cd-tutorial-how-to-deploy-an-aws-jenkins-pipeline/
      steps {
-        bat '.\mvnw package'
+        bat "mvn clean package"
      }
      post {
         success {
