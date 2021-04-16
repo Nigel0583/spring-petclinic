@@ -124,6 +124,7 @@ pipeline {
                     env.BUILD_NUMBER
                 }] < /a>&QUOT;</p > ""
                 "
+                )
             }
         }
         always {
