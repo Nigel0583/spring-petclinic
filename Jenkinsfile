@@ -12,15 +12,14 @@ pipeline {
         AWS_EB_ENVIRONMENT = 'Petclinic-env'
         AWS_EB_APP_VERSION = "${BUILD_ID}"
     }
-    agent any
+    agent {
+          label 'WindowsNode'
+    }
     tools {
         maven "MAVEN_HOME"
     }
     stages {
         stage("Build") {
-            agent {
-                label 'WindowsNode'
-            }
             steps {
                 bat "mvn -version"
                 bat "mvn clean install"
@@ -98,26 +97,30 @@ pipeline {
         }
     }
     post {
-        success {
-            emailext(
-                subject: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-                to: "nigel00582@gmail.com",
-                body: """
-                <p>SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
-                <p> Check console output at & QUOT; <a href = '${env.BUILD_URL} > ${env.JOB_NAME} [${env.BUILD_NUMBER}]' < /a>&QUOT;</p >
-                """
-            )
-        }
-        failure {
-            emailext(
-                subject: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
-                to: "nigel00582@gmail.com",
-                body: """
-                <p>FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
-                <p> Check console output at & QUOT; <a href = '${env.BUILD_URL} > ${env.JOB_NAME} [${env.BUILD_NUMBER}]' < /a>&QUOT;</p >
-                """
-                )
-        }
+     success {
+         emailext (
+             subject: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+             to: "nigel00582@gmail.com",
+             body: """<p>SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+               <p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>""",
+                recipientProviders: [
+                    [$class: 'DevelopersRecipientProvider'],
+                    [$class: 'RequesterRecipientProvider']
+                ]
+           )
+     }
+     failure {
+     emailext (
+               subject: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+               to: "nigel00582@gmail.com",
+               body: """<p>FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]':</p>
+                 <p>Check console output at &QUOT;<a href='${env.BUILD_URL}'>${env.JOB_NAME} [${env.BUILD_NUMBER}]</a>&QUOT;</p>""",
+                recipientProviders: [
+                    [$class: 'DevelopersRecipientProvider'],
+                    [$class: 'RequesterRecipientProvider']
+                ]
+             )
+         }
         always {
             cleanWs()
         }
