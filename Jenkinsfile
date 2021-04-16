@@ -1,35 +1,4 @@
 pipeline {
-    agent any
-    stages {
-        stage('Unit Test') {
-            steps {
-                sh 'mvn clean test'
-            }
-        }
-        stage('Deploy Standalone') {
-            steps {
-                sh 'mvn deploy -P standalone'
-            }
-        }
-        stage('Deploy AnyPoint') {
-            environment {
-                ANYPOINT_CREDENTIALS = credentials('anypoint.credentials')
-            }
-            steps {
-                sh 'mvn deploy -P arm -Darm.target.name=local-4.0.0-ee -Danypoint.username=${ANYPOINT_CREDENTIALS_USR}  -Danypoint.password=${ANYPOINT_CREDENTIALS_PSW}'
-            }
-        }
-        stage('Deploy CloudHub') {
-            environment {
-                ANYPOINT_CREDENTIALS = credentials('anypoint.credentials')
-            }
-            steps {
-                sh 'mvn deploy -P cloudhub -Dmule.version=4.0.0 -Danypoint.username=${ANYPOINT_CREDENTIALS_USR} -Danypoint.password=${ANYPOINT_CREDENTIALS_PSW}'
-            }
-        }
-    }
-}
-pipeline {
     environment {
         imagename = "nigel0582/pet_clinic_2"
         registryCredential = 'dockerhub'
@@ -78,7 +47,7 @@ pipeline {
                 withCredentials([string(credentialsId: 'sonar', variable: 'sonarLogin')]) {
                     bat "${scannerHome}/bin/sonar-scanner -X -Dsonar.host.url=http://localhost:9000 -Dsonar.login=${sonarLogin} -Dsonar.projectName=${env.JOB_NAME} -Dsonar.projectVersion=${env.BUILD_NUMBER} -Dsonar.projectKey=${env.JOB_BASE_NAME} -Dsonar.sources=src/main/java -Dsonar.java.libraries=target/* -Dsonar.java.binaries=target/classes -Dsonar.language=java"
                 }
-                sh "sleep 40"
+                bat "sleep 40"
                 env.WORKSPACE = pwd()
                 def file = readFile "${env.WORKSPACE}/.scannerwork/report-task.txt"
                 echo file.split("\n")[5]
@@ -155,10 +124,11 @@ pipeline {
         }
         post {
             always {
-            emailext body: "${DEFAULT_CONTENT}",
-                            recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']],
-                            subject: "${DEFAULT_SUBJECT}"
                 cleanWs()
+
+				emailext body: "${DEFAULT_CONTENT}",
+                recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']],
+                subject: "${DEFAULT_SUBJECT}"
             }
         }
     }
