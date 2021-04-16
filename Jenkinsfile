@@ -3,8 +3,9 @@ environment {
         imagename = "nigel0582/pet_clinic_2"
         registryCredential = 'dockerhub'
         dockerImage = ''
-         AWS_ACCESS_KEY_ID     = credentials('jenkins-aws-secret-key-id')
+         AWS_ACCESS_KEY_ID = credentials('jenkins-aws-secret-key-id')
          AWS_SECRET_ACCESS_KEY = credentials('jenkins-aws-secret-access-key')
+         AWS_SESSION_TOKEN = credentials('jenkins_aws_session_token')
     }
     agent any
 
