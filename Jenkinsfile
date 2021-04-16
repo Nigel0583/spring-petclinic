@@ -122,7 +122,8 @@ pipeline {
                 }
             }
         }
-        post {
+    }
+    post {
             always {
                 cleanWs()
 
@@ -130,5 +131,5 @@ pipeline {
                 recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']],
                 subject: "${DEFAULT_SUBJECT}"
             }
-        }
     }
+
