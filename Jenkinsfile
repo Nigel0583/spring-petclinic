@@ -101,7 +101,7 @@ success {
          emailext (
              subject: "SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
              to: "nigel00582@gmail.com",
-             body: """<p>SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]': Check console output at ${env.BUILD_URL} ${env.JOB_NAME} [${env.BUILD_NUMBER}]""",
+             body: """SUCCESSFUL: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]': Check console output at ${env.BUILD_URL}""",
              recipientProviders: [
                     [$class: 'DevelopersRecipientProvider'],
                     [$class: 'RequesterRecipientProvider']
@@ -112,7 +112,7 @@ success {
      emailext (
                subject: "FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
                to: "nigel00582@gmail.com",
-               body: """FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]': Check console output at ${env.BUILD_URL} ${env.JOB_NAME} [${env.BUILD_NUMBER}]""",
+               body: """FAILED: Job '${env.JOB_NAME} [${env.BUILD_NUMBER}]': Check console output at ${env.BUILD_URL}""",
               recipientProviders: [
                                   [$class: 'DevelopersRecipientProvider'],
                                   [$class: 'RequesterRecipientProvider']
