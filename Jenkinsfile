@@ -67,10 +67,7 @@ pipeline {
                 }
             }
         }
-        stage("Quality gate") {
-            steps {
-                waitForQualityGate abortPipeline: true
-            }
+
             stage("Deploy") {
                 steps {
                     bat "mvn clean package"
@@ -121,9 +118,8 @@ pipeline {
                     }
                 }
             }
-        }
     }
-    post {
+        post {
             always {
                 cleanWs()
 
@@ -131,5 +127,5 @@ pipeline {
                 recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']],
                 subject: "${DEFAULT_SUBJECT}"
             }
-    }
-
+        }
+    
