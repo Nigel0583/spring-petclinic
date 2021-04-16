@@ -36,7 +36,7 @@ pipeline {
             }
          }
       }
-      stage('Sonarqube analysis') {
+      stage('Sonarqube Analysis') {
          // Reference https://github.com/jatinngupta/Jenkins-SonarQube-Pipeline/blob/master/Jenkinsfile
          steps {
             script {
@@ -121,7 +121,11 @@ pipeline {
          cleanWs()
 
 
-				emailext body: "${DEFAULT_CONTENT}",
+				emailext body: '''
+                             		    <p></p>
+                                        <p>${DEFAULT_CONTENT}</p>
+                                        <p></p>
+                                 ''',
                 recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']],
                 subject: "${DEFAULT_SUBJECT}"
       }
