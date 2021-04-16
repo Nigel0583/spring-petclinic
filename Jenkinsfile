@@ -70,13 +70,14 @@ environment {
                              success {
                                 archiveArtifacts 'target/*.jar'
                                 bat 'aws configure set region us-east-1'
-                                bat 'aws s3 cp ./target/spring-petclinic-2.4.2.jar s3://elasticbeanstalk-us-east-1-634057952844/2021105Fw1-spring-petclinic-2.4.2.jar.jar'
+                                bat 'aws s3 cp ./target/spring-petclinic-2.4.2.jar s3://elasticbeanstalk-us-east-1-634057952844/2021105Fw1-spring-petclinic-2.4.2.jar'
                              }
                          }
                      }
+
                stage('Remove Unused docker image') {
                  steps{
-                   sh "docker rmi $imagename:$BUILD_NUMBER"
+                   sh "docker rmi $imagename"
                     sh "docker rmi $imagename:latest"
                  }
                }
